@@ -1,0 +1,13 @@
+Package: kno-mysql-dbgsym
+Package-Type: ddeb
+Source: kno-mysql
+Version: 1910.0.1-9-stable
+Auto-Built-Package: debug-symbols
+Architecture: amd64
+Maintainer: Ken Haase <kh@beingmeta.com>
+Installed-Size: 249
+Depends: kno-mysql (= 1910.0.1-9-stable)
+Section: debug
+Priority: optional
+Description: debug symbols for kno-mysql
+Build-Ids: 28f5045857e682f6350b888a43ebdb31c8d72fdf

@@ -1,0 +1,3 @@
+shlibs:Depends=libc6 (>= 2.14), libmysqlclient21 (>= 8.0.11)
+misc:Depends=
+misc:Pre-Depends=

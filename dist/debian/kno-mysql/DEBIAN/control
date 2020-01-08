@@ -1,0 +1,10 @@
+Package: kno-mysql
+Version: 1910.0.1-9-stable
+Architecture: amd64
+Maintainer: Ken Haase <kh@beingmeta.com>
+Installed-Size: 66
+Depends: kno-core, libmysqlclient21
+Section: libdevel
+Priority: optional
+Homepage: http://www.beingmeta.com/
+Description: MYSQL module for KNO
