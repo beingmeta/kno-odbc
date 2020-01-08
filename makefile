@@ -97,7 +97,7 @@ update-apt: dist/debian.updated
 debinstall: dist/debian.signed
 	${SUDO} dpkg -i ../kno-odbc*.deb
 
-debclean:
+debclean: clean
 	rm -rf ../kno-odbc_* ../kno-odbc-* debian dist/debian.*
 
 debfresh:
