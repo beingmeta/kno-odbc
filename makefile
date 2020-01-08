@@ -22,8 +22,8 @@ MOD_NAME	::= odbc
 MOD_RELEASE     ::= $(shell cat etc/release)
 MOD_VERSION	::= ${KNO_MAJOR}.${KNO_MINOR}.${MOD_RELEASE}
 
-GPGID           ::= FE1BC737F9F323D732AA26330620266BE5AFF294
-SUDO            ::= $(shell which sudo)
+GPGID = FE1BC737F9F323D732AA26330620266BE5AFF294
+SUDO  = $(shell which sudo)
 
 default build: ${MOD_NAME}.${libsuffix}
 
@@ -98,7 +98,7 @@ debinstall: dist/debian.signed
 	${SUDO} dpkg -i ../kno-odbc*.deb
 
 debclean:
-	rm -rf ../kno-odbc_* ../kno-odbc-* debian
+	rm -rf ../kno-odbc_* ../kno-odbc-* debian dist/debian.*
 
 debfresh:
 	make debclean
