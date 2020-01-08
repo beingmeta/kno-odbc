@@ -1,4 +1,4 @@
-PACKAGE=${1:-kno-mysql}
+PACKAGE=${1:-kno-odbc}
 DISTRIBUTION=${2:-stable}
 URGENCY=medium
 DATE=`date -R`

@@ -94,7 +94,7 @@ debinstall: debian.signed
 	${SUDO} dpkg -i ../kno-odbc*.deb
 
 debclean:
-	rm -f ../kno-odbc_* ../kno-odbc-* debian/changelog
+	rm -rf ../kno-odbc_* ../kno-odbc-* debian
 
 debfresh:
 	make debclean
