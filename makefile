@@ -2,8 +2,8 @@ prefix		::= $(shell knoconfig prefix)
 libsuffix	::= $(shell knoconfig libsuffix)
 KNO_CFLAGS	::= -I. -fPIC $(shell knoconfig cflags)
 KNO_LDFLAGS	::= -fPIC $(shell knoconfig ldflags)
-ODBC_CFLAGS    ::= $(shell etc/pkc --cflags odbc)
-ODBC_LDFLAGS   ::= $(shell etc/pkc --libs odbc)
+ODBC_CFLAGS     ::= 
+ODBC_LDFLAGS    ::= -lodbc
 CFLAGS		::= ${CFLAGS} ${ODBC_CFLAGS} ${KNO_CFLAGS} 
 LDFLAGS		::= ${LDFLAGS} ${ODBC_LDFLAGS} ${KNO_LDFLAGS}
 CMODULES	::= $(DESTDIR)$(shell knoconfig cmodules)
@@ -25,7 +25,7 @@ MOD_VERSION	::= ${KNO_MAJOR}.${KNO_MINOR}.${MOD_RELEASE}
 GPGID           ::= FE1BC737F9F323D732AA26330620266BE5AFF294
 SUDO            ::= $(shell which sudo)
 
-default: ${MOD_NAME}.${libsuffix}
+default build: ${MOD_NAME}.${libsuffix}
 
 odbc.o: odbc.c makefile
 	@$(CC) $(CFLAGS) -o $@ -c $<
@@ -44,7 +44,7 @@ odbc.dylib: odbc.c makefile
 TAGS: odbc.c
 	etags -o TAGS odbc.c
 
-install:
+install: build
 	@${SUDO} ${SYSINSTALL} ${MOD_NAME}.${libsuffix} \
 			${CMODULES}/${MOD_NAME}.so.${MOD_VERSION}
 	@echo === Installed ${CMODULES}/${MOD_NAME}.so.${MOD_VERSION}
