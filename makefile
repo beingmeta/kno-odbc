@@ -70,27 +70,31 @@ debian: odbc.c makefile \
 	dist/debian/changelog.base
 	rm -rf debian
 	cp -r dist/debian debian
-	cat debian/changelog.base | etc/gitchangelog kno-odbc > debian/changelog
 
 debian/changelog: debian odbc.c makefile
-	cat debian/changelog.base | etc/gitchangelog kno-odbc > $@
+	cat debian/changelog.base | etc/gitchangelog kno-odbc > $@.tmp
+	if test ! -f debian/changelog; then \
+	  mv debian/changelog.tmp debian/changelog; \
+	elif diff debian/changelog debian/changelog.tmp 2>&1 > /dev/null; then \
+	  mv debian/changelog.tmp debian/changelog; \
+	else rm debian/changelog.tmp; fi
 
-debian.built: odbc.c makefile debian debian/changelog
+dist/debian.built: odbc.c makefile debian debian/changelog
 	dpkg-buildpackage -sa -us -uc -b -rfakeroot && \
 	touch $@
 
-debian.signed: debian.built
+dist/debian.signed: dist/debian.built
 	debsign --re-sign -k${GPGID} ../kno-odbc_*.changes && \
 	touch $@
 
-dpkg dpkgs: debian.signed
+deb debs dpkg dpkgs: dist/debian.signed
 
-debian.updated: debian.signed
+dist/debian.updated: dist/debian.signed
 	dupload -c ./debian/dupload.conf --nomail --to bionic ../kno-odbc_*.changes && touch $@
 
-update-apt: debian.updated
+update-apt: dist/debian.updated
 
-debinstall: debian.signed
+debinstall: dist/debian.signed
 	${SUDO} dpkg -i ../kno-odbc*.deb
 
 debclean:
@@ -98,4 +102,4 @@ debclean:
 
 debfresh:
 	make debclean
-	make debian.built
+	make dist/debian.built
