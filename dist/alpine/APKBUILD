@@ -1,6 +1,6 @@
 # Contributor: beingmeta repository manager <repoman@beingmeta.com>
 # Maintainer: beingmeta repository manager <repoman@beingmeta.com>
-pkgname=kno-tidy
+pkgname=kno-odbc
 pkgver=$(knoconfig major).$(knoconfig minor).$(cat ../../etc/release)
 pkgrel=18
 pkgdesc="Sundown (Markdown) bindings for KNO"
@@ -12,8 +12,8 @@ makedepends="kno"
 install=""
 #subpackages="$pkgname-dev $pkgname-doc"
 subpackages=""
-source="https://github.com/beingmeta/kno-sundown/archive/trunk.tar.gz"
-builddir="kno-sundown-trunk"
+source="kno-odbc.tar"
+builddir="kno-odbc"
 
 build() {
 	make -j
