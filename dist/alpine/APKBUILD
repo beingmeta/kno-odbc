@@ -13,7 +13,7 @@ install=""
 #subpackages="$pkgname-dev $pkgname-doc"
 subpackages=""
 source="kno-odbc.tar"
-builddir="kno-odbc"
+builddir="${srcdir}/kno-odbc"
 
 build() {
 	make -j
@@ -24,6 +24,5 @@ check() {
 }
 
 package() {
-	cd src/${builddir}
 	make DESTDIR="$pkgdir" SUDO= install
 }
