@@ -82,7 +82,7 @@ debian: odbc.c makefile \
 
 debian/changelog: debian odbc.c makefile
 	cat debian/changelog.base | \
-		knomod debchangelog kno-${PKG_NAME} ${PKG_VERSION} ${CODENAME} ${RELSTATUS} > $@.tmp
+		knomod debchangelog kno-${PKG_NAME} ${CODENAME} ${RELSTATUS} > $@.tmp
 	if test ! -f debian/changelog; then \
 	  mv debian/changelog.tmp debian/changelog; \
 	elif diff debian/changelog debian/changelog.tmp 2>&1 > /dev/null; then \
@@ -108,7 +108,7 @@ debinstall: dist/debian.signed
 	${SUDO} dpkg -i ../kno-odbc*.deb
 
 debclean: clean
-	rm -rf ../kno-odbc_* ../kno-odbc-* debian dist/debian.*
+	rm -rf ../kno-odbc_* ../kno-odbc-* debian dist/debian.* staging/kno-odbc
 
 debfresh:
 	make debclean
