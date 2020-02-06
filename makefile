@@ -1,37 +1,42 @@
-prefix		::= $(shell knoconfig prefix)
-libsuffix	::= $(shell knoconfig libsuffix)
-KNO_CFLAGS	::= -I. -fPIC $(shell knoconfig cflags)
-KNO_LDFLAGS	::= -fPIC $(shell knoconfig ldflags)
+KNOCONFIG       ::= knoconfig
+prefix		::= $(shell ${KNOCONFIG} prefix)
+libsuffix	::= $(shell ${KNOCONFIG} libsuffix)
+KNO_CFLAGS	::= -I. -fPIC $(shell ${KNOCONFIG} cflags)
+KNO_LDFLAGS	::= -fPIC $(shell ${KNOCONFIG} ldflags)
 ODBC_CFLAGS     ::= 
 ODBC_LDFLAGS    ::= -lodbc
 CFLAGS		::= ${CFLAGS} ${ODBC_CFLAGS} ${KNO_CFLAGS} 
 LDFLAGS		::= ${LDFLAGS} ${ODBC_LDFLAGS} ${KNO_LDFLAGS}
-CMODULES	::= $(DESTDIR)$(shell knoconfig cmodules)
-LIBS		::= $(shell knoconfig libs)
-LIB		::= $(shell knoconfig lib)
-INCLUDE		::= $(shell knoconfig include)
-KNO_VERSION	::= $(shell knoconfig version)
-KNO_MAJOR	::= $(shell knoconfig major)
-KNO_MINOR	::= $(shell knoconfig minor)
+CMODULES	::= $(DESTDIR)$(shell ${KNOCONFIG} cmodules)
+LIBS		::= $(shell ${KNOCONFIG} libs)
+LIB		::= $(shell ${KNOCONFIG} lib)
+INCLUDE		::= $(shell ${KNOCONFIG} include)
+KNO_VERSION	::= $(shell ${KNOCONFIG} version)
+KNO_MAJOR	::= $(shell ${KNOCONFIG} major)
+KNO_MINOR	::= $(shell ${KNOCONFIG} minor)
 PKG_RELEASE	::= $(cat ./etc/release)
 DPKG_NAME	::= $(shell ./etc/dpkgname)
 MKSO		::= $(CC) -shared $(CFLAGS) $(LDFLAGS) $(LIBS)
 MSG		::= echo
 SYSINSTALL      ::= /usr/bin/install -c
-MOD_NAME	::= odbc
-MOD_RELEASE     ::= $(shell cat etc/release)
-MOD_VERSION	::= ${KNO_MAJOR}.${KNO_MINOR}.${MOD_RELEASE}
+PKG_NAME	::= odbc
+PKG_RELEASE     ::= $(shell cat etc/release)
+PKG_VERSION	::= ${KNO_MAJOR}.${KNO_MINOR}.${PKG_RELEASE}
+APKREPO         ::= $(shell ${KNOCONFIG} apkrepo)
+CODENAME	::= $(shell ${KNOCONFIG} codename)
+RELSTATUS	::= $(shell ${KNOCONFIG} status)
 
 GPGID = FE1BC737F9F323D732AA26330620266BE5AFF294
 SUDO  = $(shell which sudo)
 
-default build: ${MOD_NAME}.${libsuffix}
+default build: ${PKG_NAME}.${libsuffix}
 
 odbc.o: odbc.c makefile
 	@$(CC) $(CFLAGS) -o $@ -c $<
 	@$(MSG) CC "(ODBC)" $@
 odbc.so: odbc.o
-	$(MKSO) $(LDFLAGS) -o $@ odbc.o ${LDFLAGS}
+	@$(MKSO) $(LDFLAGS) -o $@ odbc.o ${LDFLAGS}
+	@if test ! -z "${COPY_CMODS}"; then cp $@ ${COPY_CMODS}; fi;
 	@$(MSG) MKSO  $@ $<
 	@ln -sf $(@F) $(@D)/$(@F).${KNO_MAJOR}
 odbc.dylib: odbc.c makefile
@@ -39,25 +44,29 @@ odbc.dylib: odbc.c makefile
 		`basename $(@F) .dylib`.${KNO_MAJOR}.dylib \
 		${CFLAGS} ${LDFLAGS} -o $@ $(DYLIB_FLAGS) \
 		odbc.c
+	@if test ! -z "${COPY_CMODS}"; then cp $@ ${COPY_CMODS}; fi;
 	@$(MSG) MACLIBTOOL  $@ $<
 
 TAGS: odbc.c
 	etags -o TAGS odbc.c
 
-install: build
-	@${SUDO} ${SYSINSTALL} ${MOD_NAME}.${libsuffix} \
-			${CMODULES}/${MOD_NAME}.so.${MOD_VERSION}
-	@echo === Installed ${CMODULES}/${MOD_NAME}.so.${MOD_VERSION}
-	@${SUDO} ln -sf ${MOD_NAME}.so.${MOD_VERSION} \
-			${CMODULES}/${MOD_NAME}.so.${KNO_MAJOR}.${KNO_MINOR}
-	@echo === Linked ${CMODULES}/${MOD_NAME}.so.${KNO_MAJOR}.${KNO_MINOR} \
-		to ${MOD_NAME}.so.${MOD_VERSION}
-	@${SUDO} ln -sf ${MOD_NAME}.so.${MOD_VERSION} \
-			${CMODULES}/${MOD_NAME}.so.${KNO_MAJOR}
-	@echo === Linked ${CMODULES}/${MOD_NAME}.so.${KNO_MAJOR} \
-		to ${MOD_NAME}.so.${MOD_VERSION}
-	@${SUDO} ln -sf ${MOD_NAME}.so.${MOD_VERSION} ${CMODULES}/${MOD_NAME}.so
-	@echo === Linked ${CMODULES}/${MOD_NAME}.so to ${MOD_NAME}.so.${MOD_VERSION}
+${CMODULES}:
+	install -d $@
+
+install: build ${CMODULES}
+	@${SUDO} ${SYSINSTALL} ${PKG_NAME}.${libsuffix} \
+			${CMODULES}/${PKG_NAME}.so.${PKG_VERSION}
+	@echo === Installed ${CMODULES}/${PKG_NAME}.so.${PKG_VERSION}
+	@${SUDO} ln -sf ${PKG_NAME}.so.${PKG_VERSION} \
+			${CMODULES}/${PKG_NAME}.so.${KNO_MAJOR}.${KNO_MINOR}
+	@echo === Linked ${CMODULES}/${PKG_NAME}.so.${KNO_MAJOR}.${KNO_MINOR} \
+		to ${PKG_NAME}.so.${PKG_VERSION}
+	@${SUDO} ln -sf ${PKG_NAME}.so.${PKG_VERSION} \
+			${CMODULES}/${PKG_NAME}.so.${KNO_MAJOR}
+	@echo === Linked ${CMODULES}/${PKG_NAME}.so.${KNO_MAJOR} \
+		to ${PKG_NAME}.so.${PKG_VERSION}
+	@${SUDO} ln -sf ${PKG_NAME}.so.${PKG_VERSION} ${CMODULES}/${PKG_NAME}.so
+	@echo === Linked ${CMODULES}/${PKG_NAME}.so to ${PKG_NAME}.so.${PKG_VERSION}
 
 clean:
 	rm -f *.o *.${libsuffix}
@@ -72,7 +81,8 @@ debian: odbc.c makefile \
 	cp -r dist/debian debian
 
 debian/changelog: debian odbc.c makefile
-	cat debian/changelog.base | etc/gitchangelog kno-odbc > $@.tmp
+	cat debian/changelog.base | \
+		knomod debchangelog kno-${PKG_NAME} ${CODENAME} ${RELSTATUS} > $@.tmp
 	if test ! -f debian/changelog; then \
 	  mv debian/changelog.tmp debian/changelog; \
 	elif diff debian/changelog debian/changelog.tmp 2>&1 > /dev/null; then \
@@ -98,8 +108,35 @@ debinstall: dist/debian.signed
 	${SUDO} dpkg -i ../kno-odbc*.deb
 
 debclean: clean
-	rm -rf ../kno-odbc_* ../kno-odbc-* debian dist/debian.*
+	rm -rf ../kno-odbc_* ../kno-odbc-* debian dist/debian.* staging/kno-odbc
 
 debfresh:
 	make debclean
-	make dist/debian.built
+	make dist/debian.signed
+
+# Alpine packaging
+
+${APKREPO}/dist/x86_64:
+	@install -d $@
+
+staging/alpine:
+	@install -d $@
+
+staging/alpine/APKBUILD: dist/alpine/APKBUILD staging/alpine
+	cp dist/alpine/APKBUILD staging/alpine
+
+staging/alpine/kno-${PKG_NAME}.tar: staging/alpine
+	git archive --prefix=kno-${PKG_NAME}/ -o staging/alpine/kno-${PKG_NAME}.tar HEAD
+
+dist/alpine.done: staging/alpine/APKBUILD makefile \
+	staging/alpine/kno-${PKG_NAME}.tar ${APKREPO}/dist/x86_64
+	cd staging/alpine; \
+		abuild -P ${APKREPO} clean cleancache cleanpkg && \
+		abuild checksum && \
+		abuild -P ${APKREPO} && \
+		touch ../../$@
+
+alpine: dist/alpine.done
+
+.PHONY: alpine
+
