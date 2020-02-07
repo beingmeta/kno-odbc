@@ -94,7 +94,7 @@ debian: odbc.c makefile \
 
 debian/changelog: debian odbc.c makefile
 	cat debian/changelog.base | \
-		knomod debchangelog kno-${PKG_NAME} ${CODENAME} ${RELSTATUS} > $@.tmp
+		knobuild debchangelog kno-${PKG_NAME} ${CODENAME} ${RELSTATUS} > $@.tmp
 	if test ! -f debian/changelog; then \
 	  mv debian/changelog.tmp debian/changelog; \
 	elif diff debian/changelog debian/changelog.tmp 2>&1 > /dev/null; then \
