@@ -34,7 +34,7 @@ CODENAME	::= $(shell ${KNOCONFIG} codename)
 REL_BRANCH	::= $(shell ${KNOBUILD} getbuildopt REL_BRANCH current)
 REL_STATUS	::= $(shell ${KNOBUILD} getbuildopt REL_STATUS stable)
 REL_PRIORITY	::= $(shell ${KNOBUILD} getbuildopt REL_PRIORITY medium)
-ARCH            ::= $(shell ${KNOBUILD} getbuildopt BUILD_ARCH || uname -m)
+ARCH            ::= $(shell ${KNOBUILD} getbuildopt BUILD_ARCH || uname -m || echo x86_64)
 APKREPO         ::= $(shell ${KNOBUILD} getbuildopt APKREPO /srv/repo/kno/apk)
 APK_ARCH_DIR      = ${APKREPO}/staging/${ARCH}
 
