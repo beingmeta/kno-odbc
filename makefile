@@ -88,7 +88,7 @@ gitup gitup-trunk:
 
 # Debian packaging
 
-DEBFILES=changelog.base compat control copyright dirs docs files install
+DEBFILES=changelog.base compat control copyright dirs docs install
 
 debian: odbc.c makefile \
 	dist/debian/rules dist/debian/control \
