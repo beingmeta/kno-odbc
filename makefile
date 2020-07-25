@@ -49,7 +49,6 @@ odbc.o: odbc.c makefile
 	@$(MSG) CC "(ODBC)" $@
 odbc.so: odbc.o
 	@$(MKSO) $(LDFLAGS) -o $@ odbc.o ${LDFLAGS}
-	@if test ! -z "${COPY_CMODS}"; then cp $@ ${COPY_CMODS}; fi;
 	@$(MSG) MKSO  $@ $<
 	@ln -sf $(@F) $(@D)/$(@F).${KNO_MAJOR}
 odbc.dylib: odbc.c makefile
@@ -57,7 +56,6 @@ odbc.dylib: odbc.c makefile
 		`basename $(@F) .dylib`.${KNO_MAJOR}.dylib \
 		${CFLAGS} ${LDFLAGS} -o $@ $(DYLIB_FLAGS) \
 		odbc.c
-	@if test ! -z "${COPY_CMODS}"; then cp $@ ${COPY_CMODS}; fi;
 	@$(MSG) MACLIBTOOL  $@ $<
 
 TAGS: odbc.c
