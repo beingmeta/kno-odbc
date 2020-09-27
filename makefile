@@ -5,6 +5,7 @@ prefix		::= $(shell ${KNOCONFIG} prefix)
 libsuffix	::= $(shell ${KNOCONFIG} libsuffix)
 KNO_CFLAGS	::= -I. -fPIC $(shell ${KNOCONFIG} cflags)
 KNO_LDFLAGS	::= -fPIC $(shell ${KNOCONFIG} ldflags)
+KNO_LIBS	::= $(shell ${KNOCONFIG} libs)
 ODBC_CFLAGS     ::= 
 ODBC_LDFLAGS    ::= -lodbc
 INIT_CFLAGS     ::= ${CFLAGS}
