@@ -106,15 +106,16 @@ dist/debian.built: odbc.c makefile debian debian/changelog
 	touch $@
 
 dist/debian.signed: dist/debian.built
-	debsign --re-sign -k${GPGID} ../kno-odbc_*.changes && \
-	touch $@
+	@if test "${GPGID}" = "none" || test -z "${GPGID}"; then	\
+	  echo "Skipping debian signing";				\
+	  touch $@;							\
+	else 								\
+	  echo debsign --re-sign -k${GPGID} ../kno-odbc_*.changes &&	\
+	  debsign --re-sign -k${GPGID} ../kno-odbc_*.changes && 	\
+	  touch $@;							\
+	fi;
 
 deb debs dpkg dpkgs: dist/debian.signed
-
-dist/debian.updated: dist/debian.signed
-	dupload -c ./dist/dupload.conf --nomail --to bionic ../kno-odbc_*.changes && touch $@
-
-update-apt: dist/debian.updated
 
 debinstall: dist/debian.signed
 	${SUDO} dpkg -i ../kno-odbc*.deb
