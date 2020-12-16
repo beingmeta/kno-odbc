@@ -48,7 +48,7 @@ APK_ARCH_DIR      = ${APKREPO}/staging/${ARCH}
 default build: ${PKG_NAME}.${libsuffix}
 
 odbc.o: odbc.c makefile
-	@$(CC) $(CFLAGS) -o $@ -c $<
+	@$(CC) $(CFLAGS) -D_FILEINFO="\"$(shell u8_fileinfo ./$< $(dirname $(pwd))/)\"" -o $@ -c $<
 	@$(MSG) CC "(ODBC)" $@
 odbc.so: odbc.o
 	@$(MKSO) $(LDFLAGS) -o $@ odbc.o ${LDFLAGS}

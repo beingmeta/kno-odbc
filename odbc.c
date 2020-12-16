@@ -138,9 +138,13 @@ static void recycle_odbconn(struct KNO_SQLDB *c)
   SQLFreeHandle(SQL_HANDLE_ENV,dbp->env);
 }
 
-DEFPRIM2("odbc/open",odbcopen,KNO_MAX_ARGS(2)|KNO_MIN_ARGS(1),
-         "`(ODBC/OPEN *arg0* [*arg1*])` **undocumented**",
-         kno_string_type,KNO_VOID,kno_any_type,KNO_VOID);
+
+KNO_DEFCPRIM("odbc/open",odbcopen,
+ KNO_MAX_ARGS(2)|KNO_MIN_ARGS(1),
+ "`(ODBC/OPEN *arg0* [*arg1*])` "
+ "**undocumented**",
+ "spec",kno_string_type,KNO_VOID,
+ "colinfo",kno_any_type,KNO_VOID)
 static lispval odbcopen(lispval spec,lispval colinfo)
 {
   return kno_odbc_connect(spec,colinfo,-1);
@@ -549,5 +553,5 @@ KNO_EXPORT int kno_init_odbc()
 
 static void link_local_cprims()
 {
-  KNO_LINK_PRIM("odbc/open",odbcopen,2,odbc_module);
+  KNO_LINK_CPRIM("odbc/open",odbcopen,2,odbc_module);
 }
