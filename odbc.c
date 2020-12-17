@@ -143,8 +143,8 @@ KNO_DEFCPRIM("odbc/open",odbcopen,
  KNO_MAX_ARGS(2)|KNO_MIN_ARGS(1),
  "`(ODBC/OPEN *arg0* [*arg1*])` "
  "**undocumented**",
- "spec",kno_string_type,KNO_VOID,
- "colinfo",kno_any_type,KNO_VOID)
+	     {"spec",kno_string_type,KNO_VOID},
+	     {"colinfo",kno_any_type,KNO_VOID})
 static lispval odbcopen(lispval spec,lispval colinfo)
 {
   return kno_odbc_connect(spec,colinfo,-1);
