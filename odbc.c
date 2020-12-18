@@ -141,7 +141,6 @@ static void recycle_odbconn(struct KNO_SQLDB *c)
 
 KNO_DEFCPRIM("odbc/open",odbcopen,
  KNO_MAX_ARGS(2)|KNO_MIN_ARGS(1),
- "`(ODBC/OPEN *arg0* [*arg1*])` "
  "**undocumented**",
 	     {"spec",kno_string_type,KNO_VOID},
 	     {"colinfo",kno_any_type,KNO_VOID})
