@@ -3,6 +3,7 @@
 /* odbc.c
    This implements Kno bindings to odbc.
    Copyright (C) 2007-2019 beingmeta, inc.
+   Copyright (C) 2020-2021 beingmeta, LLC
 */
 
 #ifndef _FILEINFO
@@ -140,10 +141,10 @@ static void recycle_odbconn(struct KNO_SQLDB *c)
 
 
 DEFC_PRIM("odbc/open",odbcopen,
- KNO_MAX_ARGS(2)|KNO_MIN_ARGS(1),
- "**undocumented**",
-	     {"spec",kno_string_type,KNO_VOID},
-	     {"colinfo",kno_any_type,KNO_VOID})
+	  KNO_MAX_ARGS(2)|KNO_MIN_ARGS(1),
+	  "**undocumented**",
+	  {"spec",kno_string_type,KNO_VOID},
+	  {"colinfo",kno_any_type,KNO_VOID})
 static lispval odbcopen(lispval spec,lispval colinfo)
 {
   return kno_odbc_connect(spec,colinfo,-1);
