@@ -1,4 +1,5 @@
-PKGNAME	          = odbc # Edit to adapt
+# Edit to adapt
+PKGNAME	          = odbc
 LIBNAME	          = odbc
 KNOCONFIG         = knoconfig
 KNOBUILD          = knobuild
@@ -9,7 +10,7 @@ CMODULES	::= $(DESTDIR)$(shell ${KNOCONFIG} cmodules)
 KNO_VERSION	::= $(shell ${KNOCONFIG} version)
 KNO_MAJOR	::= $(shell ${KNOCONFIG} major)
 KNO_MINOR	::= $(shell ${KNOCONFIG} minor)
-PKG_VERSION     ::= $(shell u8_gitversion etc/mod_version)
+PKG_VERSION     ::= $(shell u8_gitversion etc/knomod_version)
 PKG_MAJOR       ::= $(shell echo ${PKG_VERSION} | cut -d. -f1)
 PKG_MINOR       ::= $(shell echo ${PKG_VERSION} | cut -d. -f2)
 PKG_PATCHLEVEL  ::= $(shell echo ${PKG_VERSION} | cut -d. -f3)
@@ -83,7 +84,7 @@ ${CMODULES}:
 	install -d $@
 
 install: build ${CMODULES}
-	${SUDO} u8_install_shared ${PKGNAME}.${libsuffix} ${CMODULES} ${FULL_VERSION} "${SYSINSTALL}"
+	${SUDO} u8_install_shared ${LIBNAME}.${libsuffix} ${CMODULES} ${FULL_VERSION} "${SYSINSTALL}"
 
 clean:
 	rm -f *.o *.${libsuffix}
